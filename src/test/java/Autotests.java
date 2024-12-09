@@ -136,7 +136,7 @@ public class Autotests {
     }
 
     @Test
-    public void testBlue() throws InterruptedException {
+    public void testFun() throws InterruptedException {
         _globalDriver.get("https://google.com/");
 
         _globalDriver.findElement(By.xpath("/html/body/div[2]/div[2]/div[3]/span/div/div/div/div[3]/div[1]/button[2]/div")).click();
