@@ -62,4 +62,13 @@ public class Way2Automation {
         Assert.assertEquals(locationX, 98);
         Assert.assertEquals(locationY, 59);
     }
+
+    @Test
+    public void droppableDefault(){
+        init("https://www.way2automation.com/way2auto_jquery/droppable.php#load_box");
+        WebElement draggable = _globalDriver.findElement(By.id("draggable"));
+        WebElement droppable = _globalDriver.findElement(By.id("droppable"));
+        Actions action = new Actions(_globalDriver);
+        //action.dragAndDrop()
+    }
 }

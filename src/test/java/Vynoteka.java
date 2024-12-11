@@ -1,3 +1,5 @@
+import com.twocaptcha.TwoCaptcha;
+import com.twocaptcha.captcha.ReCaptcha;
 import okhttp3.FormBody;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -197,6 +199,14 @@ public class Vynoteka {
         System.out.println("Injected _GRECAPTCHA cookie successfully.");
         //js.executeScript("document.querySelector('form').submit();");
         // Submit the form
+        WebElement recaptchaElement = _globalDriver.findElement(By.className("g-recaptcha"));
+
+        // Get the data-callback value
+        String callback = recaptchaElement.getAttribute("data-callback");
+
+        // Execute the callback method using JavaScript
+        String tokenMaybe = "03AFcWeA6aho7IGVC7knVvqer2pD7-XDMjP9myKWAV7g67PPkuQaOHqUAbT1QuCVDg_A7lGpUgt9su-9YNSIc_V6ZLg3hj1e-psvV-7kIpRIbeapyC5umYbEdJRLd9yJkXYvJ_MhdZMklilaAh6nVZcwdFAcWf19PjH5T-VUk2cyuozE06zjMoi9wEGK8MnRprXV0mIGW01QAH-Z3-b44eizOMj8XhXmJYaKveZEMFUTQiIkF6l5rUzevflxH_PRlSgj3YJ7kgl0HAqxydqXDXciZ-6NKkXjCxGd3xC0g_mnwcijqbFgfd9N6hdc1PmL9fzToU4VY63T4q7tKazl5_nW6mf1IzZWJGKMMbIFqbWsdxoi__aBzOIv2BG4ME-cG-TuxV6dO1YyQbf_gCQKEjUBEb-H5NCcEXiZsnas5W9u5N7bxePzbBLuzEvGs-h3p8nFQMLwLRbDIXPXobObfMmHYzfSt4-jgTYltT5PwmqkiOosHaCIVAuD2O_1XMmEw3ebd59FOepX3jKhdCNczeSSuuvrN0gEOfRdMxFAXL6KUu3tbemUr-J6p0mI91i0s1j1QbSupK9K5inReV1wC7JaNHat_UTlhn1JOyitL1mPgGr88TxYZOvNOmzWVH1fGvivYiguoiX-dagdd0O0lTbo01r6-Dn_O1piHnUtF9nYqokWVJsKrpH09B9nrvdjqw9F5vRsigspPl1oKTIW6_WUfSleOzbGFDPUfUdMbba2vg-frIjaAlgy-aAo1XovBt6nwbrghmJoQBBZF4IwXIhIueAmDkE95abtugSybO8K1x37vUsg8ETZavP5V8B0fyqbz0tpzKZfG2YnSPeLQAriispEEddNNAYLPjkXhR5pZDaVljcMevK7o7GeyoZJ88TJvid6FoZsnrtpvXGIIZpkWKgVlMuZf-B1v1ExBG8Rf8e4G5cDlXD3sFz5A_imH0Q7j2tznHxDsdya_Gz3OFnXUvp95Podel7IiVH_kwrF-oS4iZfCYzh3cvXzVxye757gfPCNiLKkvcdNPIWyQB5TFJGyr7Uz9ZEkhMCWaQtMqyXfMB2oXQUiB1JAhxzTVi43D_wMo3-B1zupJ8-FN6uv2j8zzEEfyAmJYQevLwcAlMdNejpGxHyofrULTDjN8LEGwedQ6jdcn3sz2ZoPSSJiBhLZ4Rebdnyly1j11EKMy8hNa6apd0WDt33h49cqQ4MVKlltBEm7BaihskPnl69VL9Hj2FQyRHsMjGEEiVpczXrYd9kEiHZICSVpgzAzDgN7x9B0IMBufHpaFT4n6ZTjxB-3P8Bo6wqbtKN6EpHUPDnf60vs2SBofAA9DCdHfDsKbZckhvbWDYkuGXqAUWg0pP42KeYl7OXR5cXhugK0arti1WTpGnXyTBeyQxCsuxPlRKdsBt78hAvJhEboIFnush3En2sz8MWFMAyPfdaO94JiZU9Xo4SvQ";
+        js.executeScript(callback + "();");
         WebElement button = _globalDriver.findElement(By.xpath("/html/body/div[2]/div[3]/div/div/div/div[2]/form/div[7]/div/div/button"));
         js.executeScript("arguments[0].click();", button);
         System.out.println("Form submitted successfully!");
@@ -259,6 +269,42 @@ public class Vynoteka {
         return solution;
     }
 
+    @Test
+    public void messageWithCaptcha2() throws Exception {
+        // Fill out the form
+        _globalDriver.findElement(By.xpath("/html/body/div[2]/div[1]/main/section[2]/div/div/div[4]/div/div/div/button")).click();
+        _globalDriver.findElement(By.xpath("/html/body/div[2]/div[3]/div/div/div/div[2]/form/div[1]/div/input")).sendKeys("A");
+        _globalDriver.findElement(By.xpath("/html/body/div[2]/div[3]/div/div/div/div[2]/form/div[2]/div/input")).sendKeys("a@gmail.com");
+        _globalDriver.findElement(By.xpath("/html/body/div[2]/div[3]/div/div/div/div[2]/form/div[3]/div[1]/input")).sendKeys("+37065555555");
+        _globalDriver.findElement(By.xpath("/html/body/div[2]/div[3]/div/div/div/div[2]/form/div[4]/div/textarea")).sendKeys("a");
+        _globalDriver.findElement(By.xpath("/html/body/div[2]/div[3]/div/div/div/div[2]/form/div[5]/div/label/span")).click();
+
+        String solution = anotherCaptchaSolver();
+
+        ((JavascriptExecutor) _globalDriver).executeScript(
+                "if (typeof window[arguments[0]] === 'function') { window[arguments[0]](arguments[1]); }",
+                "myRecaptchaMethod", solution);
+
+        _globalDriver.findElement(By.xpath("/html/body/div[2]/div[3]/div/div/div/div[2]/button")).click();
+
+
+    }
+
+    public String anotherCaptchaSolver() throws Exception {
+
+        TwoCaptcha solver = new TwoCaptcha("70d0e2553bfc81e0b60e88d2cca8bb3f");
+        ReCaptcha captcha = new ReCaptcha();
+
+        captcha.setSiteKey("6LeFAMYbAAAAAMz7KYQcMPm0s_Z8ucB3icbLxXS4");
+        captcha.setUrl("https://vynoteka.lt");
+        try {
+            solver.solve(captcha);
+            System.out.println("Captcha solved: " + captcha.getCode());
+        } catch (Exception e) {
+            System.out.println("Error occurred: " + e.getMessage());
+        }
+        return captcha.getCode();
+    }
 
 
 
